@@ -5,6 +5,7 @@ import re
 from nltk.corpus import stopwords
 from stemming.porter2 import stem
 import networkx
+import numpy as np
 
 import nltk
 nltk.download('stopwords')
@@ -144,3 +145,39 @@ fhw = open('amazon-books-copurchase.edgelist', 'wb')
 networkx.write_weighted_edgelist(copurchaseGraph, fhw)
 fhw.close()
 
+
+
+
+fhr= open('amazon-books-copurchase.edgelist', 'rb')
+copurchaseGraph = nx.read_weighted_edgelist(fhr)
+fhr.close()
+
+import networkx as nx
+import seaborn as sns
+deg_cen_g_copurchase = nx.degree_centrality(copurchaseGraph)
+sorted_deg_cen_g_copurchase = sorted(deg_cen_g_copurchase.items(), key=lambda x:x[1], reverse = True)[0:50]
+print(sorted_deg_cen_g_copurchase)
+ASIN = [i for i,j in sorted_deg_cen_g_copurchase]
+degree = [j for i,j in sorted_deg_cen_g_copurchase]
+
+#sns.set(rc={'figure.figsize':(15,10)})
+#ax = sns.barplot(x = ASIN, y = degree, palette = sns.color_palette("rocket"))
+#ax.set_xticklabels(ax.get_xticklabels(), rotation = 45)
+
+#list(copurchaseGraph.adj['0890420254'])
+#list(copurchaseGraph.edges(data=True))[:1000]
+copurchaseGraph.adj['0890420254']
+
+node = 0
+for i in list(copurchaseGraph.edges(data=True)):
+    if i[0] == '0890420254':
+        neigh = purchaseGraph.adj['0890420254']
+        
+neigh = copurchaseGraph.edges('0890420254', data= True)
+weight =[ ]
+for i in neigh:
+    weight.append(i[2]['weight'])
+weight
+
+
+np.mean(weight)
