@@ -39,6 +39,12 @@ for line in fhr:
     elif(line.startswith("similar")):
         ls = line.split()
         Copurchased = ' '.join([c for c in ls[2:]])
+    elif(line.startswith("categories")):
+        ls = line.split()
+        Categories = ' '.join((fhr.readline()).lower() for i in range(int(ls[1].strip())))
+        Categories = re.compile('[%s]' % re.escape(string.digits+string.punctuation)).sub(' ',Categories)
+        Categories = ' '.join(set(Categories.split())-set(stopwords.words("english")))
+        Categories = ' '.join(stem(word) for word in Categories.split())
     elif(line.startswith("reviews")):
         ls = line.split()
         TotalReviews = ls[2].strip()
