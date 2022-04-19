@@ -136,3 +136,7 @@ fhw.close()
 fhw = open('amazon-books-copurchase.edgelist', 'wb')
 networkx.write_weighted_edgelist(copurchaseGraph, fhw)
 fhw.close()
+
+fhr = open('amazon-books-copurchase.edgelist', 'rb')
+copurchaseGraph = networkx.read_weighted_edgelist(fhr)
+fhr.close()
