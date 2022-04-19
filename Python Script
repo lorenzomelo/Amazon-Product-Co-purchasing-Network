@@ -1,3 +1,6 @@
+
+###### Preprocessing ######
+
 ### Preprocess 1 ###
 
 import string
@@ -8,10 +11,8 @@ import networkx
 import numpy as np
 import networkx as nx
 import seaborn as sns
-
-
-
 import nltk
+
 nltk.download('stopwords')
 
 #open file to read Amazon product metadata from http://snap.stanford.edu/data/amazon-meta.html
@@ -145,9 +146,15 @@ for asin, metadata in amazonBooks.items():
 fhw.close()
 
 # write copurchaseGraph to file
-fhw = open('amazon-books-copurchase.edgelist', 'wb')
-networkx.write_weighted_edgelist(copurchaseGraph, fhw)
-fhw.close()
+#fhw = open('amazon-books-copurchase.edgelist', 'wb')
+#networkx.write_weighted_edgelist(copurchaseGraph, fhw)
+#fhw.close()
+
+#fhr= open('amazon-books-copurchase.edgelist', 'rb')
+#copurchaseGraph = nx.read_weighted_edgelist(fhr)
+#fhr.close()
+
+##### Network Analysis #####
 
 def degree_rank(net):
     degree_sequence = sorted((d for n, d in net.degree()), reverse=True)
@@ -162,13 +169,11 @@ def degree_hist(net, kind = None, group = False):
     if kind == 'in':  degrees = net.in_degree()
     elif kind == 'out':  degrees = net.out_degree()
     else: degrees = net.degree()
-   
     df = pd.DataFrame(degrees, columns = ['Node', 'Degree'])
     nbins = None if group else len(degrees)
     fig = px.histogram(df, x="Degree", nbins = nbins )
     fig.update_layout(yaxis_title="# of Nodes", bargap=0.01)
-    return fig  
-
+    return fig 
 #degree_hist(copurchaseGraph)
 
 
@@ -183,18 +188,18 @@ sum(dict(copurchaseGraph.degree()).values()) / nx.number_of_nodes(copurchaseGrap
 # number of connected components
 nx.number_connected_components(copurchaseGraph)
 
+
 # Average clustering coefficient
 nx.average_clustering(copurchaseGraph)
+
 
 # The density tells us how many of the possible edges in the graph are actually present:
 nx.density(copurchaseGraph)
 
+
+# Number of triangles
 sum(nx.triangles(copurchaseGraph).values()) / 3
 
-
-fhr= open('amazon-books-copurchase.edgelist', 'rb')
-copurchaseGraph = nx.read_weighted_edgelist(fhr)
-fhr.close()
 
 deg_cen_g_copurchase = nx.degree_centrality(copurchaseGraph)
 sorted_deg_cen_g_copurchase = sorted(deg_cen_g_copurchase.items(), key=lambda x:x[1], reverse = True)[0:50]
@@ -218,15 +223,12 @@ for i in list(copurchaseGraph.edges(data=True)):
         
 neigh = copurchaseGraph.edges('0890420254', data= True)
 
-
 weight =[ ]
 for i in neigh:
     weight.append(i[2]['weight'])
 weight
 np.mean(weight)
-
-
-        
+  
 mean_weights = []
 for j in ASIN:
     neigh = copurchaseGraph.edges(j, data= True)
@@ -237,7 +239,6 @@ for j in ASIN:
     mean_weights.append(np.mean(weight))
 mean_weights  
 print('Mean of similarity between most connected nodes: ', np.mean(mean_weights))
-
 
 l = list(copurchaseGraph.edges(data= True))
 total_weights = []
