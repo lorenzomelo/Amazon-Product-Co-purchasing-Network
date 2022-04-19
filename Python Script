@@ -6,9 +6,11 @@ from nltk.corpus import stopwords
 from stemming.porter2 import stem
 import networkx
 
-fhr = open ('amazon-meta.txt', 'r', encoding='utf-8', errors= 'ignore')
+import nltk
+nltk.download('stopwords')
 
-amazonProducts= {}
+#open file to read Amazon product metadata from http://snap.stanford.edu/data/amazon-meta.html
+fhr = open ('amazon-meta.txt', 'r', encoding='utf-8', errors= 'ignore')
 
 
 
@@ -26,10 +28,10 @@ for line in fhr:
     elif(line.startswith("title")):
         Title = line[6:].strip()
         Title = ' '.join(Title.split())
-        #Titlefidf = Title.tolower()
-        #Titlefidf = re.compile('[%s]' % re.escape(string.digit+string.punctuation)).sub(' ',Titlefidf)
-        #Titlefidf = ' '.join(set(Titlefidf.split())-set(stopwords.words("english")))
-        #Titlefidf = ' '.join(stem(word) for word in Titlefidf.split())
+        #TitleTfidf = Title.lower()
+        #TitleTfidf = re.compile('[%s]' % re.escape(string.digits+string.punctuation)).sub(' ',TitleTfidf)
+        #TitleTfidf = ' '.join(set(TitleTfidf.split())-set(stopwords.words("english")))
+        #TitleTfidf = ' '.join(stem(word) for word in TitleTfidf.split())
     elif(line.startswith("group")):
         Group = line[6:].strip()
     elif(line.startswith("salesrank")):
@@ -95,8 +97,7 @@ for asin, metadata in amazonBooks.items():
         n1Un2 = n1 | n2
         if (len(n1Un2)) > 0:
             similarity = round (len(n1In2)/len(n1Un2), 2)
-            copurchaseGraph.add_edge(asin, a.strip(), weight=similarity)
-
+        copurchaseGraph.add_edge(asin, a.strip(), weight=similarity)
 
 
 ### Preprocess 5 ###         
