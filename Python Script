@@ -246,3 +246,46 @@ for i in l:
     total_weights.append(i[2]['weight'])
 total_mean_weights = np.mean(total_weights)
 print('Mean of similarity between all nodes: ', total_mean_weights)
+
+# Reduce the dataset to the 50 nodes with highest degree centrality and their neighbors
+deg_cen_g_copurchase = nx.degree_centrality(copurchaseGraph)
+sorted_deg_cen_g_copurchase = sorted(deg_cen_g_copurchase.items(), key=lambda x:x[1], reverse = True)[0:50]
+ASIN = [i for i,j in sorted_deg_cen_g_copurchase]
+c = list(copurchaseGraph.edges(data = True))
+fr = []
+to = []
+weight = []
+deg_cen = []
+
+for i in c:
+    if i[0] in ASIN:
+        fr.append(i[0])
+        to.append(i[1])
+        weight.append(i[2]['weight'])
+        deg_cen.append(dict(sorted_deg_cen_g_copurchase)[i[0]])
+
+edges = {'From Node': fr, 'To Node': to, 'Weight' : weight, 'Degree Centrality': deg_cen}
+df1 = pd.DataFrame(edges)
+# df.to_csv('Highest degree centrality nodes.csv')
+G = nx.from_pandas_edgelist(df1, source = 'From Node', target = 'To Node', edge_attr = 'Weight')
+# nx.write_gexf(G, path = 'sample.gexf')
+
+import matplotlib.pylab as plt
+# Adjcency matrix for first 100 sorted nodes
+G = nx.from_pandas_edgelist(df1, source = 'From Node', target = 'To Node', edge_attr = 'Weight')
+adj = nx.adjacency_matrix(G, weight='Weight')
+print(adj.shape)
+plt.spy(adj)
+
+# Adjcency matrix for sorted nodes from 100 to 260
+G = nx.from_pandas_edgelist(df1, source = 'From Node', target = 'To Node', edge_attr = 'Weight')
+adj1 = nx.adjacency_matrix(G, weight='Weight')
+print(adj1.shape)
+plt.spy(adj1)
+
+# Adjcency matrix for sorted nodes from 260 to 470
+G = nx.from_pandas_edgelist(df1, source = 'From Node', target = 'To Node', edge_attr = 'Weight')
+adj2 = nx.adjacency_matrix(G, weight='Weight')
+print(adj2.shape)
+plt.spy(adj2)
+
