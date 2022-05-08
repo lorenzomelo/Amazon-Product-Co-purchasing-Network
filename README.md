@@ -1,1 +1,1 @@
-# Amazon-product-co-purchasing-network
+# Data visualization project 
