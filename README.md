@@ -1,4 +1,4 @@
-Data visualization project
+****Data visualization project****
 
 The project has the following objectives:
 - Extract a network from the dataset
